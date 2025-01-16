@@ -16,6 +16,8 @@ function Tile() {
             
             if(hasMarker || hasBlock){
                 setIsDeleting(true);
+                setHasMarker(false);
+                setHasBlock(false);
             }else{
                 if(e.button == 2){ //right click
                     setIsMarking(true);
