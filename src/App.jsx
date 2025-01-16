@@ -17,8 +17,11 @@ function App() {
   useEffect(() => {
     const mouseDown = () => setIsMouseDown(true);
     const mouseUp = () => setIsMouseDown(false);
+    const handleContextMenu = (e) => e.preventDefault();
     window.addEventListener("mousedown", mouseDown);
     window.addEventListener("mouseup", mouseUp);
+    window.addEventListener('contextmenu', handleContextMenu)
+      
 
     return () => {
       window.removeEventListener('mousedown', mouseDown);
