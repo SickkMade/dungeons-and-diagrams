@@ -2,3 +2,8 @@
     /* width and height not needed, since grid area is new area for percents */
     background-color: gray;
 }
+
+
+.block {
+    background-color: black;
+}
