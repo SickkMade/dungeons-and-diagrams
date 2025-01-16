@@ -5,8 +5,9 @@ import { AppContext } from '../App';
 function Tile() {
     const [usable, setUsable] = useState(true);
     const [hasBlock, setHasBlock] = useState(false);
+    const [hasMarker, setHasMarker] = useState(false);
     const tileRef = useRef(null);
-    const {isMouseDown, setIsDeleting, isDeleting} = useContext(AppContext);
+    const {isMouseDown, setIsDeleting, isDeleting, isMarking, setIsMarking} = useContext(AppContext);
 
     // this useeffect is for setting blocks
     useEffect(() => {
@@ -19,14 +20,30 @@ function Tile() {
             }
         }
 
-        //seperated out because handle click state doesnt change isMouseDown fast enough
-        const handleMouseDown = () => {
-            if(isMouseDown){
-                createBlock(isDeleting)
+        const createMarker = (isDeleting) => {
+            if(isDeleting){
+                setHasMarker(false)
+            } else {
+                setHasMarker(true)
             }
         }
 
-        const handleClick = () => {
+        //seperated out because handle click state doesnt change isMouseDown fast enough
+        const handleMouseDown = () => {
+            if(isMouseDown){
+                if(isMarking){ //if right click
+                    createMarker(isDeleting)
+                } 
+                else{
+                    createBlock(isDeleting)
+                }
+            }
+        }
+
+        const handleClick = (e) => {
+            if(e.button === 2){
+                setIsMarking(true);
+            }
             
             //i need to fix these state issues, these are silly workarounds
             if(hasBlock){
@@ -34,7 +51,10 @@ function Tile() {
                 setIsDeleting(true);
                 createBlock(true);
 
-            } else{
+            } else if (e.button === 2){
+                setIsDeleting(false);
+                createMarker(false)
+            } else {
                 createBlock(false);
                 setIsDeleting(false);
             }
@@ -49,9 +69,18 @@ function Tile() {
         }
     }, [usable, hasBlock, isMouseDown, isDeleting])
 
+    const handleClassAttribution = () => {
+        if(hasBlock){
+            return 'block'
+        } else if(hasMarker){
+            return 'marker'
+        }
+        return ''
+    }
+
     
   return (
-    <div ref={tileRef} className={`tile ${hasBlock ? 'block' : ''}`}></div>
+    <div ref={tileRef} className={`tile ${handleClassAttribution()}`}></div>
   )
 }
 
