@@ -7,12 +7,12 @@ function Tile() {
     const [hasBlock, setHasBlock] = useState(false);
     const [hasMarker, setHasMarker] = useState(false);
     const tileRef = useRef(null);
-    const {isMouseDown, setIsDeleting, isDeleting, isMarking, setIsMarking} = useContext(AppContext);
+    const {isMouseDown, setIsDeleting, isDeleting, isMarking, setIsMarking, setIsMouseDown} = useContext(AppContext);
 
     // this useeffect is for setting blocks
     useEffect(() => {
         if(!usable) return;
-        const createBlock = (isDeleting) => {
+        const handleBlocks = () => {
             if(isDeleting){
                 setHasBlock(false)
             } else{
@@ -20,7 +20,7 @@ function Tile() {
             }
         }
 
-        const createMarker = (isDeleting) => {
+        const handleMarkers = () => {
             if(isDeleting){
                 setHasMarker(false)
             } else {
@@ -32,42 +32,46 @@ function Tile() {
         const handleMouseDown = () => {
             if(isMouseDown){
                 if(isMarking){ //if right click
-                    createMarker(isDeleting)
+                    handleMarkers(isDeleting)
                 } 
                 else{
-                    createBlock(isDeleting)
+                    handleBlocks(isDeleting)
                 }
             }
         }
 
         const handleClick = (e) => {
+            setIsMouseDown(true);
             if(e.button === 2){
                 setIsMarking(true);
             }
             
             //i need to fix these state issues, these are silly workarounds
-            if(hasBlock){
+            if(hasBlock || hasMarker){
                 //if we click on block we are deleting
                 setIsDeleting(true);
-                createBlock(true);
-
-            } else if (e.button === 2){
-                setIsDeleting(false);
-                createMarker(false)
             } else {
-                createBlock(false);
                 setIsDeleting(false);
             }
+
+            handleMouseDown()
+        }
+
+        const mouseUp = () => {
+            setIsMarking(false);
+            setIsMouseDown(false);
         }
 
         tileRef.current.addEventListener("mouseover", handleMouseDown);
         tileRef.current.addEventListener("mousedown", handleClick);
+        tileRef.current.addEventListener("mouseup", mouseUp);
 
         return () => {
             tileRef.current.removeEventListener("mousedown", handleClick);
             tileRef.current.removeEventListener("mouseover", handleMouseDown);
+            tileRef.current.removeEventListener("mouseup", mouseUp);
         }
-    }, [usable, hasBlock, isMouseDown, isDeleting])
+    }, [usable, hasBlock, isMouseDown, isDeleting, isMarking])
 
     const handleClassAttribution = () => {
         if(hasBlock){
