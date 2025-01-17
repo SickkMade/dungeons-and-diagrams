@@ -1,6 +1,9 @@
 .tile{
     /* width and height not needed, since grid area is new area for percents */
     background-color: gray;
+
+    box-sizing:border-box;
+    border:1px solid black;
 }
 
 

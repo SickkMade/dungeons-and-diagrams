@@ -23,7 +23,8 @@
     width:var(--gameBoardSize);
 }
 .countertile--row > div{
-    width:12.5%;
+    height:var(--counterTileSize);
+    width:var(--counterTileSize);
     text-align: center;
 }
 
@@ -31,8 +32,10 @@
     display:flex;
     flex-flow:nowrap column;
     height:var(--gameBoardSize);
+    margin-top:var(--counterTileSize);
 }
 .countertile--col > div{
-    height:12.5%;
+    height:var(--counterTileSize);
+    width:var(--counterTileSize);
     text-align: center;
 }

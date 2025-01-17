@@ -3,4 +3,5 @@
   height:100dvh;
 
   --gameBoardSize: 35em;
+  --counterTileSize: calc(var(--gameBoardSize) / 8)
 }
