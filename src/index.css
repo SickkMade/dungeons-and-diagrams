@@ -1,6 +1,7 @@
 #root{
   width:100dvw;
   height:100dvh;
+  user-select: none;
 
   --gameBoardSize: 35em;
   --counterTileSize: calc(var(--gameBoardSize) / 8)
