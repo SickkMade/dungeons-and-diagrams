@@ -3,18 +3,22 @@ import { AppContext } from "../App"
 import "../css/Tile.css"
 
 function CounterTile({isRow, index}) {
-    const {gameBoard} = useContext(AppContext);
+    const {solutionBoard} = useContext(AppContext);
     const getBlockValue = () => {
         let counter = 0
         if(isRow){
-            gameBoard[index].map((value) => (
-                counter += value
-            ))
+            solutionBoard[index].map((value) => {
+                if(value=== 'W'){
+                    counter += 1;
+                }
+            })
         }
         else{
-            gameBoard.map((row) => (
-                counter += row[index]
-            ))
+            solutionBoard.map((row) => {
+                if(row[index] === 'W'){
+                    counter += 1;
+                }
+            })
         }
         return counter
     }
