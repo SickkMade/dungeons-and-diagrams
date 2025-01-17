@@ -1,4 +1,6 @@
 #root{
   width:100dvw;
   height:100dvh;
+
+  --gameBoardSize: 35em;
 }
