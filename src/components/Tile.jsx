@@ -1,13 +1,21 @@
 import '../css/Tile.css'
 import { useState, useEffect, useRef, useContext} from 'react'
 import { AppContext } from '../App';
+import PropTypes from 'prop-types';
 
 function Tile({i, j}) {
-    const [usable, setUsable] = useState(true);
+    const [usable, setUsable] = useState(false);
     const [hasBlock, setHasBlock] = useState(false);
     const [hasMarker, setHasMarker] = useState(false);
     const tileRef = useRef(null);
-    const {isMouseDown, setIsDeleting, isDeleting, isMarking, setIsMarking, setIsMouseDown, gameBoard} = useContext(AppContext);
+    const {solutionBoard, isMouseDown, setIsDeleting, isDeleting, isMarking, setIsMarking, setIsMouseDown, gameBoard} = useContext(AppContext);
+
+    useEffect(()=>{
+        if(solutionBoard[i][j]==='M')
+            setUsable(false)
+        else
+            setUsable(true)
+    },[solutionBoard, i, j])
 
     // this useeffect is for setting blocks
     useEffect(() => {
@@ -67,6 +75,7 @@ function Tile({i, j}) {
 
 
     const handleClassAttribution = () => {
+        if(!usable) return 'monster'
         if(hasBlock){
             return 'block'
         } else if(hasMarker){
@@ -79,6 +88,11 @@ function Tile({i, j}) {
   return (
     <div ref={tileRef} className={`tile ${handleClassAttribution()}`}></div>
   )
+}
+
+Tile.propTypes = {
+    i: PropTypes.number,
+    j: PropTypes.number,
 }
 
 export default Tile

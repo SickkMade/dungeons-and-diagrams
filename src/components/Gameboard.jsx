@@ -124,7 +124,6 @@ function Gameboard() {
     useEffect(()=>{
         createRandomSolutionBoard()
     }, [])
-
   return (
     <section className="gameboard--container">
     <div className="countertile--col">
@@ -141,7 +140,7 @@ function Gameboard() {
         <div className="gameboard">
         {gameBoard.map((row, i) => (
             row.map((value, j) => (
-                <Tile i={i} j={j} key={`gameboard ${i}-${j}`} />
+                <Tile i={i} j={j} isMonster={solutionBoard[i][j]==='M'} key={`gameboard ${i}-${j}`} />
             ))
         ))}
         </div>
