@@ -17,8 +17,6 @@ function Gameboard() {
         //create treasure
         let treasureX = Math.round(Math.random() * 5)+1
         let treasureY = Math.round(Math.random() * 5)+1
-        //place treasure
-        newBoard[treasureX][treasureY] = 'T'
         //place treasure walls
         let treasureWalls = [] //temp solution
         for(let i = Math.max(0, treasureX-2); i <= Math.min(7, treasureX+2); i++){
@@ -33,6 +31,9 @@ function Gameboard() {
                 }
             }
         }
+        //place treasure
+        newBoard[treasureX][treasureY] = 'T'
+        
         const [openWallX, openWallY] = treasureWalls[Math.floor(treasureWalls.length * Math.random())]
         newBoard[openWallX][openWallY] = 'P' //open up treasure wall
 
