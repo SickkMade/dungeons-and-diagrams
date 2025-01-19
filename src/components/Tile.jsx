@@ -1,16 +1,17 @@
 import '../css/Tile.css'
-import { useState, useEffect, useRef, useContext} from 'react'
+import React, { useState, useEffect, useRef, useContext} from 'react'
 import { AppContext } from '../App';
 import PropTypes from 'prop-types';
 
-function Tile({i, j}) {
-    const tileTypes = Object.freeze({
-        MONSTER: 'MONSTER',
-        TREASURE: 'TREASURE',
-        BLOCK: 'BLOCK',
-        MARKER: 'MARKER',
-        EMPTY: ''
-    })
+const tileTypes = Object.freeze({
+    MONSTER: 'MONSTER',
+    TREASURE: 'TREASURE',
+    BLOCK: 'BLOCK',
+    MARKER: 'MARKER',
+    EMPTY: ''
+})
+
+const Tile = React.memo(({i, j}) => {
     const [currentTileType, setCurrentTileType] = useState(tileTypes.EMPTY);
     const tileRef = useRef(null);
     const {solutionBoard, isMouseDown, setIsDeleting, isDeleting, isMarking, setIsMarking, setIsMouseDown, gameBoard} = useContext(AppContext);
@@ -78,13 +79,26 @@ function Tile({i, j}) {
             tileRef.current.removeEventListener("mouseover", handleMouseOver);
             tileRef.current.removeEventListener("mouseup", handleMouseUp);
         }
-    }, [isMarking, isDeleting, currentTileType, isMouseDown])
+    }, [isMouseDown])
+
+    useEffect(()=>{
+        switch (currentTileType){
+            case tileTypes.BLOCK:
+                gameBoard.current[i][j] = 'W'
+                break;
+            case tileTypes.EMPTY:
+                gameBoard.current[i][j] = 0
+                break;
+        }
+    },[currentTileType])
     
 
   return (
     <div ref={tileRef} className={`tile ${currentTileType}`}></div>
   )
-}
+})
+
+Tile.displayName="Tile"
 
 Tile.propTypes = {
     i: PropTypes.number,

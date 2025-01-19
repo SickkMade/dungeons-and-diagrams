@@ -1,10 +1,11 @@
-import { useContext } from "react"
+import { useContext, useMemo } from "react"
+import React from "react"
 import { AppContext } from "../App"
 import "../css/Tile.css"
 
-function CounterTile({isRow, index}) {
+const CounterTile = React.memo( ({isRow, index}) => {
     const {solutionBoard} = useContext(AppContext);
-    const getBlockValue = () => {
+    const getBlockValue = useMemo(() => {
         let counter = 0
         if(!isRow){
             solutionBoard[index].map((value) => {
@@ -21,10 +22,11 @@ function CounterTile({isRow, index}) {
             })
         }
         return counter
-    }
+    }, [solutionBoard])
   return (
-    <div className="tile">{getBlockValue()}</div>
+    <div className="tile">{getBlockValue}</div>
   )
-}
+})
 
+CounterTile.displayName="CounterTile"
 export default CounterTile
