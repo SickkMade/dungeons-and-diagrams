@@ -6,16 +6,16 @@ function CounterTile({isRow, index}) {
     const {solutionBoard} = useContext(AppContext);
     const getBlockValue = () => {
         let counter = 0
-        if(isRow){
+        if(!isRow){
             solutionBoard[index].map((value) => {
-                if(value=== 'W'){
+                if(value=== 'W' || value === 0){
                     counter += 1;
                 }
             })
         }
         else{
             solutionBoard.map((row) => {
-                if(row[index] === 'W'){
+                if(row[index] === 'W' || row[index] === 0){
                     counter += 1;
                 }
             })

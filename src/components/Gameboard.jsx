@@ -33,7 +33,7 @@ function Gameboard() {
         }
         //place treasure
         newBoard[treasureX][treasureY] = 'T'
-        
+
         const [openWallX, openWallY] = treasureWalls[Math.floor(treasureWalls.length * Math.random())]
         newBoard[openWallX][openWallY] = 'P' //open up treasure wall
 
@@ -67,32 +67,36 @@ function Gameboard() {
                 return true
             };
         
-            let possibleDirs = [];
-            const shuffledDirs = Shuffle([...pathDirs]);
-        
-            // find all valid dirs
-            for(const [dx, dy] of shuffledDirs) {
-                const ni = i + dx;
-                const nj = j + dy;
-        
-                if(!isValidPosition(ni, nj)) continue;
-                if(newBoard[ni][nj] !== 0) continue;
-                if(!isSafePosition(ni, nj)) continue;
-        
-                possibleDirs.push([dx, dy]);
+            //loop until no more directions to explore
+            while(true){
+                let possibleDirs = [];
+                const shuffledDirs = Shuffle([...pathDirs]);
+            
+                // find all valid dirs
+                for(const [dx, dy] of shuffledDirs) {
+                    const ni = i + dx;
+                    const nj = j + dy;
+            
+                    if(!isValidPosition(ni, nj)) continue;
+                    if(newBoard[ni][nj] !== 0) continue;
+                    if(!isSafePosition(ni, nj)) continue;
+            
+                    possibleDirs.push([dx, dy]);
+                }
+            
+                // magic
+                if(possibleDirs.length > 0) {
+                    const [dx, dy] = possibleDirs[0];
+                    const ni = i + dx;
+                    const nj = j + dy;
+                    newBoard[ni][nj] = 'P';
+                    createPath(ni, nj);
+                }
+                else {
+                    return false
+                }
             }
-        
-            // magic
-            if(possibleDirs.length > 0) {
-                const [dx, dy] = possibleDirs[0];
-                const ni = i + dx;
-                const nj = j + dy;
-                newBoard[ni][nj] = 'P';
-                createPath(ni, nj);
-            }
-            else {
-                return false
-            }
+            
         };
 
         createPath(openWallX,openWallY);
