@@ -46,22 +46,23 @@ function Gameboard() {
         
             // check if allowed tile
             const isSafePosition = (x, y) => {
-                let pathNeighbors = 0;
-                for(let dx = -1; dx <= 1; dx++) {
-                    for(let dy = -1; dy <= 1; dy++) {
-                        //skip middle tile
-                        if(i === 0 && j === 0) continue;
-                        
-                        const nx = x + dx;
-                        const ny = y + dy;
-                        if(!isValidPosition(nx, ny)) continue;
+                newBoard[x][y] = 'P'
+                for(let i = x-1; i <= x; i++){
+                    for(let j = y-1; j <= y; j++){
+                        if (i >= 0 && i < BOARD_SIZE - 1 && j >= 0 && j < BOARD_SIZE - 1){
+                            const c1 = (i === x && j === y) || newBoard[i][j] === 'P';
+                            const c2 = (i === x && j+1 === y) || newBoard[i][j+1] === 'P';
+                            const c3 = (i+1 === x && j === y) || newBoard[i+1][j] === 'P';
+                            const c4 = (i+1 === x && j+1 === y) || newBoard[i+1][j+1] === 'P';
 
-                        if(newBoard[nx][ny] === 'P') pathNeighbors++;
-                        else pathNeighbors = 0
-
-                        if (pathNeighbors >= 3) return false
+                            if(c1 && c2 && c3 && c4){
+                                newBoard[x][y] = 0
+                                return false
+                            }
+                        }
                     }
                 }
+                newBoard[x][y] = 0
                 return true
             };
         
@@ -86,10 +87,11 @@ function Gameboard() {
                 const ni = i + dx;
                 const nj = j + dy;
                 newBoard[ni][nj] = 'P';
-                return createPath(ni, nj);
+                createPath(ni, nj);
             }
-        
-            return false;
+            else {
+                return false
+            }
         };
 
         createPath(openWallX,openWallY);
