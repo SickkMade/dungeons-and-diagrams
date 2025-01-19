@@ -3,6 +3,7 @@ import "../css/Gameboard.css"
 import Tile from './Tile'
 import { useContext, useEffect } from 'react'
 import CounterTile from './CounterTile';
+import Shuffle from '../misc/HelperFunctions.js'
 
 function Gameboard() {
 
@@ -19,61 +20,79 @@ function Gameboard() {
         //place treasure
         newBoard[treasureX][treasureY] = 'T'
         //place treasure walls
-        let deletedWall = null;
+        let treasureWalls = [] //temp solution
         for(let i = Math.max(0, treasureX-2); i <= Math.min(7, treasureX+2); i++){
             for(let j = Math.max(0, treasureY-2); j <= Math.min(7, treasureY+2); j++){
                 if(j === treasureY-2 || j === treasureY+2 || i === treasureX-2 || i === treasureX+2){
-                    if(!deletedWall && Math.floor(Math.random() * 4) == 0 
-                    && i > treasureX-2 && i < treasureX+2)
-                    {
-                        deletedWall = [i,j]; //x, y
-                        newBoard[i][j] = 'X'
-                    }
-                    else{
-                        newBoard[i][j] = 'W'
+                    newBoard[i][j] = 'W' //wall
+                    if(i!== treasureX-2 || i!== treasureX+2){
+                        treasureWalls.push([i,j])
                     }
                 } else {
                     newBoard[i][j] = 'S' //safe
                 }
             }
         }
-        const getDirection = (i, j) => {
-            let dir = pathDirs[Math.floor(Math.random() * pathDirs.length)]
-            let ni = i+dir[0]
-            let nj = j+dir[1]
-            let willCreateFour = false;
-            //if outside of board
-            if(ni < 0 || ni > 7 || nj < 0 || nj > 7)return;
+        const [openWallX, openWallY] = treasureWalls[Math.floor(treasureWalls.length * Math.random())]
+        newBoard[openWallX][openWallY] = 'P' //open up treasure wall
 
-            let currentTile = newBoard[ni][nj]
-            if(currentTile == 'W' || currentTile =='S' || currentTile == 'P') return;
+        const createPath = (i, j) => {
+            const BOARD_SIZE = 8;
+            
+            // check if in gameBoard
+            const isValidPosition = (x, y) => {
+                return x >= 0 && x < BOARD_SIZE && y >= 0 && y < BOARD_SIZE;
+            };
+        
+            // check if allowed tile
+            const isSafePosition = (x, y) => {
+                let pathNeighbors = 0;
+                for(let dx = -1; dx <= 1; dx++) {
+                    for(let dy = -1; dy <= 1; dy++) {
+                        //skip middle tile
+                        if(i === 0 && j === 0) continue;
+                        
+                        const nx = x + dx;
+                        const ny = y + dy;
+                        if(!isValidPosition(nx, ny)) continue;
 
-            let counter = 0;
-            for(let i = ni-1; i <= ni+1; i++){
-                for(let j = nj-1; j <=nj+1; j++){
-                    if(ni === 0 && nj=== 0) return; //skip center
-                    if(newBoard[ni][nj] === 'P'){
-                        counter+=1;
-                        if(counter >= 3)willCreateFour=true;
-                    }
-                    else{
-                        counter = 0;
+                        if(newBoard[nx][ny] === 'P') pathNeighbors++;
+                        else pathNeighbors = 0
+
+                        if (pathNeighbors >= 3) return false
                     }
                 }
+                return true
+            };
+        
+            let possibleDirs = [];
+            const shuffledDirs = Shuffle([...pathDirs]);
+        
+            // find all valid dirs
+            for(const [dx, dy] of shuffledDirs) {
+                const ni = i + dx;
+                const nj = j + dy;
+        
+                if(!isValidPosition(ni, nj)) continue;
+                if(newBoard[ni][nj] !== 0) continue;
+                if(!isSafePosition(ni, nj)) continue;
+        
+                possibleDirs.push([dx, dy]);
             }
-            if(willCreateFour) return;
-            return [ni,nj]
-        }
-
-        const createPath = (i,j) => {
-            let loc = getDirection(i, j);
-            if(loc !== undefined){ //if not null
-            newBoard[loc[0]][loc[1]] = 'P' //Path
-            createPath(loc[0], loc[1])
+        
+            // magic
+            if(possibleDirs.length > 0) {
+                const [dx, dy] = possibleDirs[0];
+                const ni = i + dx;
+                const nj = j + dy;
+                newBoard[ni][nj] = 'P';
+                return createPath(ni, nj);
             }
-        }
+        
+            return false;
+        };
 
-        createPath(0, 0);
+        createPath(openWallX,openWallY);
         setSolutionBoard(newBoard);
         console.log(newBoard);
     }
