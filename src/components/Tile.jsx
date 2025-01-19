@@ -4,22 +4,32 @@ import { AppContext } from '../App';
 import PropTypes from 'prop-types';
 
 function Tile({i, j}) {
-    const [usable, setUsable] = useState(false);
+    const usable = useRef(false);
+    const isTreasure = useRef(false);
     const [hasBlock, setHasBlock] = useState(false);
     const [hasMarker, setHasMarker] = useState(false);
     const tileRef = useRef(null);
     const {solutionBoard, isMouseDown, setIsDeleting, isDeleting, isMarking, setIsMarking, setIsMouseDown, gameBoard} = useContext(AppContext);
 
+
     useEffect(()=>{
-        if(solutionBoard[i][j]==='M')
-            setUsable(false)
-        else
-            setUsable(true)
+        if(solutionBoard[i][j]==='M'){
+            usable.current = false
+            isTreasure.current = false
+        }
+        else if (solutionBoard[i][j]==='T'){
+            usable.current = false
+            isTreasure.current = true
+        }
+        else{
+            isTreasure.current = false
+            usable.current = true
+        }
     },[solutionBoard, i, j])
 
     // this useeffect is for setting blocks
     useEffect(() => {
-        if(!usable) return;
+        if(!usable.current) return;
         const handleSetHasBlock = (value) => {
             setHasBlock(value);
             gameBoard[j][i] = 'W'
@@ -75,8 +85,11 @@ function Tile({i, j}) {
 
 
     const handleClassAttribution = () => {
-        if(!usable) return 'monster'
-        if(hasBlock){
+        if(!usable.current){
+            if(isTreasure.current) return 'treasure'
+            return 'monster'
+        } 
+        else if(hasBlock){
             return 'block'
         } else if(hasMarker){
             return 'marker'
