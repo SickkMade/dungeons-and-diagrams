@@ -50,10 +50,10 @@ function Gameboard() {
                 for(let i = x-1; i <= x; i++){
                     for(let j = y-1; j <= y; j++){
                         if (i >= 0 && i < BOARD_SIZE - 1 && j >= 0 && j < BOARD_SIZE - 1){
-                            const c1 = (i === x && j === y) || newBoard[i][j] === 'P';
-                            const c2 = (i === x && j+1 === y) || newBoard[i][j+1] === 'P';
-                            const c3 = (i+1 === x && j === y) || newBoard[i+1][j] === 'P';
-                            const c4 = (i+1 === x && j+1 === y) || newBoard[i+1][j+1] === 'P';
+                            const c1 = (i === x && j === y) || newBoard[i][j] === 'P' || newBoard[i][j] === 'M';
+                            const c2 = (i === x && j+1 === y) || newBoard[i][j+1] === 'P' || newBoard[i][j] === 'M';
+                            const c3 = (i+1 === x && j === y) || newBoard[i+1][j] === 'P' || newBoard[i][j] === 'M';
+                            const c4 = (i+1 === x && j+1 === y) || newBoard[i+1][j+1] === 'P' || newBoard[i][j] === 'M';
 
                             if(c1 && c2 && c3 && c4){
                                 return false
@@ -69,14 +69,14 @@ function Gameboard() {
                 for(const [dx,dy] of pathDirs){
                     let nx = x + dx
                     let ny = y + dy
-                    if(!isValidPosition(nx,ny) 
-                        || newBoard[nx][ny] === '0'
+                    if(!isValidPosition(nx,ny)
+                        || newBoard[nx][ny] === 0
                         || newBoard[nx][ny] === 'W'
                     ){
                         possiblePlacements+=1;
                     }
                 }
-                if(possiblePlacements >= 3) return true;
+                if(possiblePlacements == 3) return true;
                 return false;
             }
         
@@ -106,7 +106,9 @@ function Gameboard() {
                     createPath(ni, nj);
                 }
                 else {
-                    if(canPlaceMonster(i,j)) newBoard[i][j] = 'M';
+                    if(canPlaceMonster(i,j)){
+                        newBoard[i][j] = 'M';
+                    }
                     return false
                 }
             }
