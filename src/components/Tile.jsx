@@ -24,7 +24,7 @@ const Tile = React.memo(({i, j}) => {
         else if (solutionBoard[i][j]==='T'){
             setCurrentTileType(tileTypes.TREASURE)
         }
-    },[solutionBoard, i, j])
+    },[solutionBoard])
 
     // this useeffect is for setting blocks
     useEffect(() => {
@@ -33,7 +33,6 @@ const Tile = React.memo(({i, j}) => {
         ) return;
 
         const handleMouseDown = (e) => {
-            
             if(currentTileType === tileTypes.BLOCK ||
                 currentTileType === tileTypes.MARKER
             ){
@@ -79,19 +78,7 @@ const Tile = React.memo(({i, j}) => {
             tileRef.current.removeEventListener("mouseover", handleMouseOver);
             tileRef.current.removeEventListener("mouseup", handleMouseUp);
         }
-    }, [isMouseDown])
-
-    useEffect(()=>{
-        switch (currentTileType){
-            case tileTypes.BLOCK:
-                gameBoard.current[i][j] = 'W'
-                break;
-            case tileTypes.EMPTY:
-                gameBoard.current[i][j] = 0
-                break;
-        }
-    },[currentTileType])
-    
+    }, [isMouseDown, currentTileType])
 
   return (
     <div ref={tileRef} className={`tile ${currentTileType}`}></div>

@@ -7,7 +7,8 @@ import Shuffle from '../misc/HelperFunctions.js'
 
 function Gameboard() {
 
-    const {gameBoard, solutionBoard, setSolutionBoard} = useContext(AppContext);
+    const {solutionBoard, setSolutionBoard} = useContext(AppContext);
+    
 
     const pathDirs = [[-1,0],[1,0],[0,1],[0,-1]]
 
@@ -126,21 +127,22 @@ function Gameboard() {
     useEffect(()=>{
         createRandomSolutionBoard()
     }, [])
+    
   return (
     <section className="gameboard--container">
     <div className="countertile--col">
-        {gameBoard.current[0].map((value,i)=>(
+        {solutionBoard[0].map((value,i)=>(
             <CounterTile key={`countertile-col-${i}`} isRow={false} index={i}/>
         ))}
     </div>
     <div className="countertile--wrapper">
         <div className="countertile--row">
-        {gameBoard.current[0].map((value,i)=>(
+        {solutionBoard[0].map((value,i)=>(
             <CounterTile key={`countertile-row-${i}`} isRow={true} index={i}/>
         ))}
         </div>
         <div className="gameboard">
-        {gameBoard.current.map((row, i) => (
+        {solutionBoard.map((row, i) => (
             row.map((value, j) => (
                 <Tile i={i} j={j} key={`gameboard ${i}-${j}`} />
             ))
