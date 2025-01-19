@@ -4,50 +4,47 @@ import { AppContext } from '../App';
 import PropTypes from 'prop-types';
 
 function Tile({i, j}) {
-    const usable = useRef(false);
-    const isTreasure = useRef(false);
-    const [hasBlock, setHasBlock] = useState(false);
-    const [hasMarker, setHasMarker] = useState(false);
+    const tileTypes = Object.freeze({
+        MONSTER: 'MONSTER',
+        TREASURE: 'TREASURE',
+        BLOCK: 'BLOCK',
+        MARKER: 'MARKER',
+        EMPTY: ''
+    })
+    const [currentTileType, setCurrentTileType] = useState(tileTypes.EMPTY);
     const tileRef = useRef(null);
     const {solutionBoard, isMouseDown, setIsDeleting, isDeleting, isMarking, setIsMarking, setIsMouseDown, gameBoard} = useContext(AppContext);
 
 
     useEffect(()=>{
         if(solutionBoard[i][j]==='M'){
-            usable.current = false
-            isTreasure.current = false
+            setCurrentTileType(tileTypes.MONSTER)
         }
         else if (solutionBoard[i][j]==='T'){
-            usable.current = false
-            isTreasure.current = true
-        }
-        else{
-            isTreasure.current = false
-            usable.current = true
+            setCurrentTileType(tileTypes.TREASURE)
         }
     },[solutionBoard, i, j])
 
     // this useeffect is for setting blocks
     useEffect(() => {
-        if(!usable.current) return;
-        const handleSetHasBlock = (value) => {
-            setHasBlock(value);
-            gameBoard[j][i] = 'W'
-        }
+        if(currentTileType === tileTypes.MONSTER ||
+            currentTileType === tileTypes.TREASURE
+        ) return;
 
         const handleMouseDown = (e) => {
             
-            if(hasMarker || hasBlock){
+            if(currentTileType === tileTypes.BLOCK ||
+                currentTileType === tileTypes.MARKER
+            ){
                 setIsDeleting(true);
-                setHasMarker(false);
-                handleSetHasBlock(false);
+                setCurrentTileType(tileTypes.EMPTY)
             }else{
                 if(e.button == 2){ //right click
                     setIsMarking(true);
-                    setHasMarker(true);
+                    setCurrentTileType(tileTypes.MARKER)
                 } 
                 else{
-                    handleSetHasBlock(true);
+                    setCurrentTileType(tileTypes.BLOCK)
                 }
             }
             setIsMouseDown(true); 
@@ -56,14 +53,14 @@ function Tile({i, j}) {
         const handleMouseOver = () => {
             if(!isMouseDown) return;
             if(isDeleting){
-                setHasMarker(false);
-                handleSetHasBlock(false);
+                setCurrentTileType(tileTypes.EMPTY)
             }
-            else if(isMarking && !hasBlock){
-                setHasMarker(true)
-            }
-            else if(!isMarking && !hasMarker){
-                handleSetHasBlock(true)
+            else if(currentTileType==tileTypes.EMPTY){
+                if(isMarking){
+                    setCurrentTileType(tileTypes.MARKER)
+                }else{
+                    setCurrentTileType(tileTypes.BLOCK)
+                }
             }
         }
         const handleMouseUp = () => {
@@ -81,25 +78,11 @@ function Tile({i, j}) {
             tileRef.current.removeEventListener("mouseover", handleMouseOver);
             tileRef.current.removeEventListener("mouseup", handleMouseUp);
         }
-    }, [usable, hasMarker, hasBlock, isMouseDown])
-
-
-    const handleClassAttribution = () => {
-        if(!usable.current){
-            if(isTreasure.current) return 'treasure'
-            return 'monster'
-        } 
-        else if(hasBlock){
-            return 'block'
-        } else if(hasMarker){
-            return 'marker'
-        }
-        return ''
-    }
-
+    }, [isMarking, isDeleting, currentTileType, isMouseDown])
     
+
   return (
-    <div ref={tileRef} className={`tile ${handleClassAttribution()}`}></div>
+    <div ref={tileRef} className={`tile ${currentTileType}`}></div>
   )
 }
 

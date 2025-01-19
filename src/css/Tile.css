@@ -7,15 +7,15 @@
 }
 
 
-.block {
+.BLOCK {
     background-color: black;
 }
-.marker{
+.MARKER{
     background-color:red;
 }
-.monster{
+.MONSTER{
     background-color:green;
 }
-.treasure{
+.TREASURE{
     background-color:gold;
 }
