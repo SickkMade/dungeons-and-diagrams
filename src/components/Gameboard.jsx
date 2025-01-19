@@ -46,14 +46,15 @@ function Gameboard() {
             };
         
             // check if allowed tile
+            //4 2x2 checks to check 3x3 area
             const isSafePosition = (x, y) => {
                 for(let i = x-1; i <= x; i++){
                     for(let j = y-1; j <= y; j++){
                         if (i >= 0 && i < BOARD_SIZE - 1 && j >= 0 && j < BOARD_SIZE - 1){
                             const c1 = (i === x && j === y) || newBoard[i][j] === 'P' || newBoard[i][j] === 'M';
-                            const c2 = (i === x && j+1 === y) || newBoard[i][j+1] === 'P' || newBoard[i][j] === 'M';
-                            const c3 = (i+1 === x && j === y) || newBoard[i+1][j] === 'P' || newBoard[i][j] === 'M';
-                            const c4 = (i+1 === x && j+1 === y) || newBoard[i+1][j+1] === 'P' || newBoard[i][j] === 'M';
+                            const c2 = (i === x && j+1 === y) || newBoard[i][j+1] === 'P' || newBoard[i][j+1] === 'M';
+                            const c3 = (i+1 === x && j === y) || newBoard[i+1][j] === 'P' || newBoard[i+1][j] === 'M';
+                            const c4 = (i+1 === x && j+1 === y) || newBoard[i+1][j+1] === 'P' || newBoard[i+1][j+1] === 'M';
 
                             if(c1 && c2 && c3 && c4){
                                 return false
