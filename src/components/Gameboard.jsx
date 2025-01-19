@@ -23,7 +23,7 @@ function Gameboard() {
             for(let j = Math.max(0, treasureY-2); j <= Math.min(7, treasureY+2); j++){
                 if(j === treasureY-2 || j === treasureY+2 || i === treasureX-2 || i === treasureX+2){
                     newBoard[i][j] = 'W' //wall
-                    if(i!== treasureX-2 || i!== treasureX+2){
+                    if(i!== treasureX-2 && i!== treasureX+2 && i!==0 && i!== 7 && j!== 0 & j!==7){
                         treasureWalls.push([i,j])
                     }
                 } else {
