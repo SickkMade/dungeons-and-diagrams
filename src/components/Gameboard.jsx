@@ -47,7 +47,6 @@ function Gameboard() {
         
             // check if allowed tile
             const isSafePosition = (x, y) => {
-                newBoard[x][y] = 'P'
                 for(let i = x-1; i <= x; i++){
                     for(let j = y-1; j <= y; j++){
                         if (i >= 0 && i < BOARD_SIZE - 1 && j >= 0 && j < BOARD_SIZE - 1){
@@ -57,15 +56,29 @@ function Gameboard() {
                             const c4 = (i+1 === x && j+1 === y) || newBoard[i+1][j+1] === 'P';
 
                             if(c1 && c2 && c3 && c4){
-                                newBoard[x][y] = 0
                                 return false
                             }
                         }
                     }
                 }
-                newBoard[x][y] = 0
                 return true
             };
+
+            const canPlaceMonster = (x,y) => {
+                let possiblePlacements = 0
+                for(const [dx,dy] of pathDirs){
+                    let nx = x + dx
+                    let ny = y + dy
+                    if(!isValidPosition(nx,ny) 
+                        || newBoard[nx][ny] === '0'
+                        || newBoard[nx][ny] === 'W'
+                    ){
+                        possiblePlacements+=1;
+                    }
+                }
+                if(possiblePlacements >= 3) return true;
+                return false;
+            }
         
             //loop until no more directions to explore
             while(true){
@@ -93,6 +106,7 @@ function Gameboard() {
                     createPath(ni, nj);
                 }
                 else {
+                    if(canPlaceMonster(i,j)) newBoard[i][j] = 'M';
                     return false
                 }
             }
