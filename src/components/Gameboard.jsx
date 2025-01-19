@@ -32,6 +32,8 @@ function Gameboard() {
             }
         }
         //place treasure
+        treasureX += Math.floor(Math.random()*3)-1
+        treasureY += Math.floor(Math.random()*3)-1
         newBoard[treasureX][treasureY] = 'T'
 
         const [openWallX, openWallY] = treasureWalls[Math.floor(treasureWalls.length * Math.random())]
