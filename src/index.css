@@ -4,5 +4,9 @@
   user-select: none;
 
   --gameBoardSize: 35em;
-  --counterTileSize: calc(var(--gameBoardSize) / 8)
+  --counterTileSize: calc(var(--gameBoardSize) / 8);
+}
+
+body{
+  overflow:hidden;
 }
