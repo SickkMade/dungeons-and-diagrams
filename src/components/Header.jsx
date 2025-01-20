@@ -18,7 +18,7 @@ function Header() {
         <div className="header--bottom-row">
             <div>
                 <span>Room</span>
-                <input ref={seedInput} value={randomSeed} maxLength={8} type="text" />
+                <input ref={seedInput} defaultValue={randomSeed} maxLength={8} type="text" />
             </div>
             <button onClick={inputToSeed}>Choose</button>
             <button onClick={setSeedToRandom}>Random</button>

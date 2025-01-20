@@ -16,31 +16,37 @@ function Gameboard() {
 
     const createRandomSolutionBoard = () => {
         let newBoard = Array.from(Array(8), () => new Array(8).fill(0))
+        let treasureOpenings = []
 
-        //create treasure room
-        let treasureX = Math.round(myrng() * 5)+1
-        let treasureY = Math.round(myrng() * 5)+1
-        //place treasure walls
-        let treasureWalls = [] //temp solution
-        for(let i = Math.max(0, treasureX-2); i <= Math.min(7, treasureX+2); i++){
-            for(let j = Math.max(0, treasureY-2); j <= Math.min(7, treasureY+2); j++){
-                if(j === treasureY-2 || j === treasureY+2 || i === treasureX-2 || i === treasureX+2){
-                    newBoard[i][j] = 'W' //wall
-                    if(i!== treasureX-2 && i!== treasureX+2 && i!==0 && i!== 7 && j!== 0 & j!==7){
-                        treasureWalls.push([i,j])
+        const createTreasure = (numOfTreasures) => {
+            for(let n = 0; n < numOfTreasures; n++){
+            //create treasure room
+            let treasureX = Math.round(myrng() * 5)+1
+            let treasureY = Math.round(myrng() * 5)+1
+            //place treasure walls
+            let treasureWalls = [] //temp solution
+            for(let i = Math.max(0, treasureX-2); i <= Math.min(7, treasureX+2); i++){
+                for(let j = Math.max(0, treasureY-2); j <= Math.min(7, treasureY+2); j++){
+                    if(j === treasureY-2 || j === treasureY+2 || i === treasureX-2 || i === treasureX+2){
+                        newBoard[i][j] = 'W' //wall
+                        if(i!== treasureX-2 && i!== treasureX+2 && i!==0 && i!== 7 && j!== 0 & j!==7){
+                            treasureWalls.push([i,j])
+                        }
+                    } else {
+                        newBoard[i][j] = 'S' //safe
                     }
-                } else {
-                    newBoard[i][j] = 'S' //safe
                 }
             }
-        }
-        //place treasure
-        treasureX += Math.floor(myrng()*3)-1
-        treasureY += Math.floor(myrng()*3)-1
-        newBoard[treasureX][treasureY] = 'T'
+            //place and rotate
+            treasureX += Math.floor(myrng()*3)-1
+            treasureY += Math.floor(myrng()*3)-1
+            newBoard[treasureX][treasureY] = 'T'
 
-        const [openWallX, openWallY] = treasureWalls[Math.floor(treasureWalls.length * myrng())]
-        newBoard[openWallX][openWallY] = 'P' //open up treasure wall
+            const [openWallX, openWallY] = treasureWalls[Math.floor(treasureWalls.length * myrng())]
+            treasureOpenings.push([openWallX, openWallY])
+            newBoard[openWallX][openWallY] = 'P' //open up treasure wall
+            }
+        }
         
         const createPath = (i, j) => {
             const BOARD_SIZE = 8;
@@ -121,7 +127,11 @@ function Gameboard() {
             
         };
 
-        createPath(openWallX,openWallY);
+        createTreasure(Math.floor(myrng()*3)+1)
+
+        for(const [x, y] of treasureOpenings){
+            createPath(x,y);
+        }
 
         correctWallsSolution.current = 0
         for(let i = 0; i < 8; i++){
