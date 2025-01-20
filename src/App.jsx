@@ -52,8 +52,10 @@ function App() {
 
   return (
     <AppContext.Provider value={appContextValue}>
-    <Header />
-    <Gameboard />
+      <section id="main">
+      <Header />
+      <Gameboard />
+      </section>
     </AppContext.Provider>
   )
 }

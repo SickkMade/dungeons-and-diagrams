@@ -3,7 +3,7 @@ import { useContext, useRef } from 'react'
 import { AppContext } from '../App'
 
 function Header() {
-    const {setRandomSeed} = useContext(AppContext)
+    const {setRandomSeed, randomSeed} = useContext(AppContext)
     const seedInput = useRef(null)
 
     const inputToSeed = () => setRandomSeed(Number(seedInput.current.value))
@@ -18,7 +18,7 @@ function Header() {
         <div className="header--bottom-row">
             <div>
                 <span>Room</span>
-                <input ref={seedInput} maxLength={8} type="text" />
+                <input ref={seedInput} value={randomSeed} maxLength={8} type="text" />
             </div>
             <button onClick={inputToSeed}>Choose</button>
             <button onClick={setSeedToRandom}>Random</button>

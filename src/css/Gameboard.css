@@ -15,11 +15,8 @@
 } */
 
 .gameboard--container{
-    height:100%;
     display:flex;
     flex-flow: row nowrap;
-    justify-content: center;
-    align-items:center;
 }
 
 .countertile--row{
