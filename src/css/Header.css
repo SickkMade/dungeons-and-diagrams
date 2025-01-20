@@ -1,0 +1,13 @@
+.header{
+    width: var(--gameBoardSize);
+    background-color: burlywood;
+
+    display:flex;
+    flex-flow:column nowrap;
+    justify-content: space-between;
+}
+.header--bottom-row{
+    display:flex;
+    flex-flow:row nowrap;
+    justify-content: space-between;
+}

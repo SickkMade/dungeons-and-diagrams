@@ -3,7 +3,7 @@
   height:100dvh;
   user-select: none;
 
-  --gameBoardSize: 35em;
+  --gameBoardSize: 25em;
   --counterTileSize: calc(var(--gameBoardSize) / 8);
 }
 

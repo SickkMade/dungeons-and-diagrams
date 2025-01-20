@@ -1,11 +1,11 @@
-function Shuffle(array) {
+function Shuffle(array, myrng) {
     var m = array.length, t, i;
   
     // While there remain elements to shuffle…
     while (m) {
   
       // Pick a remaining element…
-      i = Math.floor(Math.random() * m--);
+      i = Math.floor(myrng() * m--);
   
       // And swap it with the current element.
       t = array[m];

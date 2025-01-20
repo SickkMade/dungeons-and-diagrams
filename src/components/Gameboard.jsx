@@ -4,11 +4,13 @@ import Tile from './Tile'
 import { useContext, useEffect, useRef } from 'react'
 import CounterTile from './CounterTile';
 import Shuffle from '../misc/HelperFunctions.js'
+import seedrandom from 'seedrandom';
 
 function Gameboard() {
 
     const {solutionBoard, setSolutionBoard, correctWalls} = useContext(AppContext);
     const correctWallsSolution = useRef(0)
+    const myrng = seedrandom(120938019);
 
     const pathDirs = [[-1,0],[1,0],[0,1],[0,-1]]
 
@@ -16,8 +18,8 @@ function Gameboard() {
         let newBoard = Array.from(Array(8), () => new Array(8).fill(0))
 
         //create treasure room
-        let treasureX = Math.round(Math.random() * 5)+1
-        let treasureY = Math.round(Math.random() * 5)+1
+        let treasureX = Math.round(myrng() * 5)+1
+        let treasureY = Math.round(myrng() * 5)+1
         //place treasure walls
         let treasureWalls = [] //temp solution
         for(let i = Math.max(0, treasureX-2); i <= Math.min(7, treasureX+2); i++){
@@ -33,11 +35,11 @@ function Gameboard() {
             }
         }
         //place treasure
-        treasureX += Math.floor(Math.random()*3)-1
-        treasureY += Math.floor(Math.random()*3)-1
+        treasureX += Math.floor(myrng()*3)-1
+        treasureY += Math.floor(myrng()*3)-1
         newBoard[treasureX][treasureY] = 'T'
 
-        const [openWallX, openWallY] = treasureWalls[Math.floor(treasureWalls.length * Math.random())]
+        const [openWallX, openWallY] = treasureWalls[Math.floor(treasureWalls.length * myrng())]
         newBoard[openWallX][openWallY] = 'P' //open up treasure wall
         
         const createPath = (i, j) => {
@@ -87,7 +89,7 @@ function Gameboard() {
             //loop until no more directions to explore
             while(true){
                 let possibleDirs = [];
-                const shuffledDirs = Shuffle([...pathDirs]);
+                const shuffledDirs = Shuffle([...pathDirs], myrng);
             
                 // find all valid dirs
                 for(const [dx, dy] of shuffledDirs) {

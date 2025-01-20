@@ -1,5 +1,6 @@
 import Gameboard from "./components/Gameboard"
 import { createContext, useState, useRef, useEffect } from "react"
+import Header from "./components/Header";
 export const AppContext = createContext();
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
 
   return (
     <AppContext.Provider value={appContextValue}>
+    <Header />
     <Gameboard />
     </AppContext.Provider>
   )
