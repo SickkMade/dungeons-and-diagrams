@@ -6,7 +6,7 @@ function Header() {
     const {setRandomSeed} = useContext(AppContext)
     const seedInput = useRef(null)
 
-    const inputToSeed = () => setRandomSeed(seedInput.current.value)
+    const inputToSeed = () => setRandomSeed(Number(seedInput.current.value))
     const setSeedToRandom = () => {
         let random = Math.floor(Math.random() * 100000000)
         setRandomSeed(random)

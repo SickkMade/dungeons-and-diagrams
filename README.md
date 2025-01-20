@@ -6,3 +6,5 @@
 - [ ] GET ASSETS !!!
 - [ ] add instruction
 - [ ] use url instead of localstorage
+- [ ] change counter tile color depending if the row is correct (have to change correct logic :/)
+- [ ] like above but also turn tiles red if tile extends & counter
