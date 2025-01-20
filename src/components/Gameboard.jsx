@@ -1,14 +1,14 @@
 import { AppContext } from '../App';
 import "../css/Gameboard.css"
 import Tile from './Tile'
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useRef } from 'react'
 import CounterTile from './CounterTile';
 import Shuffle from '../misc/HelperFunctions.js'
 
 function Gameboard() {
 
-    const {solutionBoard, setSolutionBoard} = useContext(AppContext);
-    
+    const {solutionBoard, setSolutionBoard, correctWalls} = useContext(AppContext);
+    const correctWallsSolution = useRef(0)
 
     const pathDirs = [[-1,0],[1,0],[0,1],[0,-1]]
 
@@ -39,7 +39,7 @@ function Gameboard() {
 
         const [openWallX, openWallY] = treasureWalls[Math.floor(treasureWalls.length * Math.random())]
         newBoard[openWallX][openWallY] = 'P' //open up treasure wall
-
+        
         const createPath = (i, j) => {
             const BOARD_SIZE = 8;
             
@@ -83,7 +83,7 @@ function Gameboard() {
                 if(possiblePlacements == 3) return true;
                 return false;
             }
-        
+            
             //loop until no more directions to explore
             while(true){
                 let possibleDirs = [];
@@ -120,6 +120,16 @@ function Gameboard() {
         };
 
         createPath(openWallX,openWallY);
+
+        correctWallsSolution.current = 0
+        for(let i = 0; i < 8; i++){
+            for(let j = 0; j < 8; j++){
+                if(newBoard[i][j] == 0 || newBoard[i][j] === 'W') {
+                    correctWallsSolution.current+=1
+                }
+            }
+        }
+
         setSolutionBoard(newBoard);
         console.log(newBoard);
     }
@@ -127,6 +137,12 @@ function Gameboard() {
     useEffect(()=>{
         createRandomSolutionBoard()
     }, [])
+
+    useEffect(()=>{
+        if(correctWalls===correctWallsSolution.current){
+            console.log('yahoo')
+        }
+    },[correctWalls])
     
   return (
     <section className="gameboard--container">

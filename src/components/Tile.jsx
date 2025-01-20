@@ -14,7 +14,7 @@ const tileTypes = Object.freeze({
 const Tile = React.memo(({i, j}) => {
     const [currentTileType, setCurrentTileType] = useState(tileTypes.EMPTY);
     const tileRef = useRef(null);
-    const {solutionBoard, isMouseDown, setIsDeleting, isDeleting, isMarking, setIsMarking, setIsMouseDown, gameBoard} = useContext(AppContext);
+    const {solutionBoard, isMouseDown, setIsDeleting, isDeleting, isMarking, setIsMarking, setIsMouseDown, setCorrectWalls} = useContext(AppContext);
 
 
     useEffect(()=>{
@@ -79,6 +79,25 @@ const Tile = React.memo(({i, j}) => {
             tileRef.current.removeEventListener("mouseup", handleMouseUp);
         }
     }, [isMouseDown, currentTileType])
+
+    useEffect(()=>{
+        if(currentTileType === tileTypes.BLOCK){
+            if(solutionBoard[i][j] === 0 || solutionBoard[i][j] === 'W'){
+                setCorrectWalls(prevValue => prevValue += 1)
+            }
+            else {
+                setCorrectWalls(prevValue => prevValue -= 1)
+            }
+        }
+        else if(currentTileType === tileTypes.EMPTY){
+            if(solutionBoard[i][j] === 0 || solutionBoard[i][j] === 'W'){
+                setCorrectWalls(prevValue => prevValue -= 1)
+            }
+            else {
+                setCorrectWalls(prevValue => prevValue += 1)
+            }
+        }
+    }, [currentTileType])
 
   return (
     <div ref={tileRef} className={`tile ${currentTileType}`}></div>
