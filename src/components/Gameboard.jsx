@@ -19,10 +19,27 @@ function Gameboard() {
         let treasureOpenings = []
 
         const createTreasure = (numOfTreasures) => {
+            const isValid4x4 = (i, j) => { 
+                if((newBoard[i+2]?.[j+2] ?? 0) == 0 &&
+                (newBoard[i-2]?.[j-2] ?? 0) == 0 &&
+                (newBoard[i+2]?.[j-2] ?? 0) == 0 &&
+                (newBoard[i-2]?.[j+2] ?? 0) == 0 
+                ){
+                    return true
+                }
+                return false
+            }
+
+
             for(let n = 0; n < numOfTreasures; n++){
             //create treasure room
-            let treasureX = Math.round(myrng() * 5)+1
-            let treasureY = Math.round(myrng() * 5)+1
+            let treasureX = 0
+            let treasureY = 0
+            for(let k = 0; k < 100; k++){ //sorry this is so bad
+                treasureX = Math.round(myrng() * 5)+1
+                treasureY = Math.round(myrng() * 5)+1
+                if(isValid4x4(treasureX, treasureY)) break;
+            }
             //place treasure walls
             let treasureWalls = [] //temp solution
             for(let i = Math.max(0, treasureX-2); i <= Math.min(7, treasureX+2); i++){

@@ -89,7 +89,7 @@ const Tile = React.memo(({i, j}) => {
                 setCorrectWalls(prevValue => prevValue -= 1)
             }
         }
-        else if(currentTileType === tileTypes.EMPTY){
+        else if(currentTileType === tileTypes.EMPTY && !isMarking){
             if(solutionBoard[i][j] === 0 || solutionBoard[i][j] === 'W'){
                 setCorrectWalls(prevValue => prevValue -= 1)
             }
