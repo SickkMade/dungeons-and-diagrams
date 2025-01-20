@@ -9,7 +9,7 @@ function App() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isMarking, setIsMarking] = useState(false);
   const [correctWalls, setCorrectWalls] = useState(128);
-  const [randomSeed, setRandomSeed] = useState(null);
+  const [randomSeed, setRandomSeed] = useState(0);
   const appContextValue = {
     correctWalls,
     setCorrectWalls,
@@ -46,7 +46,7 @@ function App() {
   }, [])
 
   useEffect(() => {
-    if(randomSeed === null) return
+    if(randomSeed === 0) return
     localStorage.setItem('randomseed', JSON.stringify(randomSeed));
   }, [randomSeed]);
 
