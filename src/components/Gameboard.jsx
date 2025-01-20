@@ -15,7 +15,7 @@ function Gameboard() {
     const createRandomSolutionBoard = () => {
         let newBoard = Array.from(Array(8), () => new Array(8).fill(0))
 
-        //create treasure
+        //create treasure room
         let treasureX = Math.round(Math.random() * 5)+1
         let treasureY = Math.round(Math.random() * 5)+1
         //place treasure walls
