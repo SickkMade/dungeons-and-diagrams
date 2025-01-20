@@ -9,7 +9,7 @@ function App() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isMarking, setIsMarking] = useState(false);
   const [correctWalls, setCorrectWalls] = useState(128);
-  const [randomSeed, setRandomSeed] = useState(12345678)
+  const [randomSeed, setRandomSeed] = useState(null);
   const appContextValue = {
     correctWalls,
     setCorrectWalls,
@@ -25,6 +25,15 @@ function App() {
     setRandomSeed
   }
 
+  useEffect(()=>{
+    if(localStorage.getItem('randomseed') != null){
+      setRandomSeed(JSON.parse(localStorage.getItem('randomseed')))
+    }
+    else{
+      setRandomSeed(12345678)
+    }
+  }, [])
+
   useEffect(() => {
     
     const handleContextMenu = (e) => e.preventDefault();
@@ -35,6 +44,11 @@ function App() {
       window.removeEventListener('contextmenu', handleContextMenu);
     };
   }, [])
+
+  useEffect(() => {
+    if(randomSeed === null) return
+    localStorage.setItem('randomseed', JSON.stringify(randomSeed));
+  }, [randomSeed]);
 
   return (
     <AppContext.Provider value={appContextValue}>
