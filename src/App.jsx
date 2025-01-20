@@ -9,6 +9,7 @@ function App() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isMarking, setIsMarking] = useState(false);
   const [correctWalls, setCorrectWalls] = useState(128);
+  const [randomSeed, setRandomSeed] = useState(12345678)
   const appContextValue = {
     correctWalls,
     setCorrectWalls,
@@ -19,7 +20,9 @@ function App() {
     setIsMarking,
     setIsMouseDown,
     solutionBoard,
-    setSolutionBoard
+    setSolutionBoard,
+    randomSeed,
+    setRandomSeed
   }
 
   useEffect(() => {

@@ -14,7 +14,7 @@ const tileTypes = Object.freeze({
 const Tile = React.memo(({i, j}) => {
     const [currentTileType, setCurrentTileType] = useState(tileTypes.EMPTY);
     const tileRef = useRef(null);
-    const {solutionBoard, isMouseDown, setIsDeleting, isDeleting, isMarking, setIsMarking, setIsMouseDown, setCorrectWalls} = useContext(AppContext);
+    const {randomSeed, solutionBoard, isMouseDown, setIsDeleting, isDeleting, isMarking, setIsMarking, setIsMouseDown, setCorrectWalls} = useContext(AppContext);
 
 
     useEffect(()=>{
@@ -98,6 +98,12 @@ const Tile = React.memo(({i, j}) => {
             }
         }
     }, [currentTileType])
+
+    useEffect(()=>{
+        setCurrentTileType(tileTypes.EMPTY)
+    }, [randomSeed])
+
+
 
   return (
     <div ref={tileRef} className={`tile ${currentTileType}`}></div>

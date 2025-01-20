@@ -8,9 +8,9 @@ import seedrandom from 'seedrandom';
 
 function Gameboard() {
 
-    const {solutionBoard, setSolutionBoard, correctWalls} = useContext(AppContext);
+    const {setCorrectWalls, randomSeed, solutionBoard, setSolutionBoard, correctWalls} = useContext(AppContext);
     const correctWallsSolution = useRef(0)
-    const myrng = seedrandom(120938019);
+    const myrng = seedrandom(randomSeed);
 
     const pathDirs = [[-1,0],[1,0],[0,1],[0,-1]]
 
@@ -138,7 +138,8 @@ function Gameboard() {
 
     useEffect(()=>{
         createRandomSolutionBoard()
-    }, [])
+        setCorrectWalls(0)
+    }, [randomSeed])
 
     useEffect(()=>{
         if(correctWalls===correctWallsSolution.current){
