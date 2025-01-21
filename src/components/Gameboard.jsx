@@ -36,8 +36,8 @@ function Gameboard() {
             let treasureX = 0
             let treasureY = 0
             for(let k = 0; k < 100; k++){ //sorry this is so bad
-                treasureX = Math.round(myrng() * 5)+1
-                treasureY = Math.round(myrng() * 5)+1
+                treasureX = Math.floor(myrng() * 6)+1
+                treasureY = Math.floor(myrng() * 6)+1
                 if(isValid4x4(treasureX, treasureY)) break;
             }
             //place treasure walls
@@ -144,8 +144,11 @@ function Gameboard() {
             
         };
 
-        createTreasure(Math.floor(myrng()*3)+1)
+        createTreasure(Math.floor(myrng()*2))
 
+        if(treasureOpenings.length === 0){
+            treasureOpenings.push([0,0])
+        }
         for(const [x, y] of treasureOpenings){
             createPath(x,y);
         }
